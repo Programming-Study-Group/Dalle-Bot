@@ -33,9 +33,12 @@ async def on_message(message):
         
         images = re.search('\[(.*)\]', req.content.decode("utf-8") ).group(0)
         encodings = [e.replace("\\n", "") for e in re.findall('"([^"]*)"', images)]
-        for encoded in encodings:
-            with open("image.png", "wb") as fh:
+        myfiles = []
+        for i, encoded in enumerate(encodings):
+            with open("img/image{}.png".format(i), "wb") as fh:
                 fh.write(b64decode(encoded))
-                await message.channel.send(file = discord.File("image.png"))
+            myfiles.append(discord.File("img/image{}.png".format(i)))
         
+        await message.channel.send(files = myfiles)
+
 client.run(settings.TOKEN)
